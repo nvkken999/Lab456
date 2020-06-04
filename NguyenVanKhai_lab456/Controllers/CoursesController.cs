@@ -1,4 +1,5 @@
-﻿using NguyenVanKhai_lab456.Models;
+﻿using Microsoft.AspNet.Identity;
+using NguyenVanKhai_lab456.Models;
 using NguyenVanKhai_lab456.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,22 @@ namespace NguyenVanKhai_lab456.Controllers
 
 
         // GET: Courses
-        public ActionResult Create()
+        [Authorize]
+        [HttpPost]
+        public ActionResult Create(CourseViewModel viewModel)
         {
-            var viewModel = new CourseViewModel
+            var course = new Course
             {
-                Categories = _dbContext.Categories.ToList()
+                LecturerId = User.Identity.GetUserId(),
+                Datetime = viewModel.GetDateTime(),
+                CategoryId = viewModel.Category,
+                Place = viewModel.Place      
             };
-            return View(viewModel);
+            _dbContext.Course.Add(course);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
+        
     }
 }
