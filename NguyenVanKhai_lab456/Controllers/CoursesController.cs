@@ -18,11 +18,26 @@ namespace NguyenVanKhai_lab456.Controllers
         }
 
 
-        // GET: Courses
+        // GET: 
+        [Authorize]
+        public ActionResult Create()
+        {
+            var viewModel = new CourseViewModel
+            {
+                Categories = _dbContext.Categories.ToList()
+
+            };
+            return View(viewModel); 
+        }
         [Authorize]
         [HttpPost]
         public ActionResult Create(CourseViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Categories = _dbContext.Categories.ToList();
+                return View("Create", viewModel);
+            }
             var course = new Course
             {
                 LecturerId = User.Identity.GetUserId(),
