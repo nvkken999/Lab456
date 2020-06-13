@@ -18,7 +18,7 @@ namespace NguyenVanKhai_lab456.Controllers
         }
 
 
-        // GET: 
+        // GET: Courses
         [Authorize]
         public ActionResult Create()
         {
@@ -31,6 +31,7 @@ namespace NguyenVanKhai_lab456.Controllers
         }
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(CourseViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -45,7 +46,7 @@ namespace NguyenVanKhai_lab456.Controllers
                 CategoryId = viewModel.Category,
                 Place = viewModel.Place      
             };
-            _dbContext.Course.Add(course);
+            _dbContext.Courses.Add(course);
             _dbContext.SaveChanges();
 
             return RedirectToAction("Index", "Home");
