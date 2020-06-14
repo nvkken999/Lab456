@@ -3,6 +3,7 @@ using NguyenVanKhai_lab456.Models;
 using NguyenVanKhai_lab456.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -51,6 +52,34 @@ namespace NguyenVanKhai_lab456.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-        
+       
+        [Authorize]
+        public ActionResult Attending()
+        {
+            var userId = User.Identity.GetUserId();
+            var courses = _dbContext.Ateendances
+                .Where(a => a.AttendeeId == userId)
+                .Select(a => a.Course)
+                .Include(l => l.Lecturer)
+                .Include(l => l.Category)
+                .ToList();
+            var viewModel = new CoursesViewModel
+            {
+                UpcommingCourses = courses,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+            return View(viewModel);
+        } 
+        [Authorize]
+        public ActionResult Mine()
+        {
+            var userId = User.Identity.GetUserId();
+            var courses = _dbContext.Courses
+                .Where(c=> c.LecturerId == userId && c.Datetime>DateTime.Now)              
+                .Include(c => c.Lecturer)
+                .Include(c => c.Category)
+                .ToList();
+            return View(courses);
+        }
     }
 }
