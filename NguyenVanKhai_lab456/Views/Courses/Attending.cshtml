@@ -8,32 +8,32 @@
 
 
 <ul class="course">
-    @foreach (var cousre in Model.UpcommingCourses)
+    @foreach (var course in Model.UpcommingCourses)
     {
         <li>
             <div class="date">
                 <div class="month">
-                    @cousre.Datetime.ToString("MM")
+                    @course.Datetime.ToString("MM")
                 </div>
                 <div class="day">
-                    @cousre.Datetime.ToString("dd")
+                    @course.Datetime.ToString("dd")
                 </div>
             </div>
 
             <div class="details">
                 <span class="lecturer">
-                    @cousre.Lecturer.Name
+                    @course.Lecturer.Name
                     @if (Model.ShowAction)
                     {
-                        <button class="btn btn-link btn-sm js-toggle-follow data-user-id=@cousre.LecturerId">Follow</button>
+                        <button class="btn btn-link btn-sm js-toggle-follow" data-user-id="@course.LecturerId">Follow</button>
                     }
                 </span>
                 <span class="category">
-                    @cousre.Category.Name
+                    @course.Category.Name
                 </span>
                 @if (Model.ShowAction)
                 {
-                    <button data-course-id="@cousre.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>
+                    <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>
                 }
             </div>
         </li>
