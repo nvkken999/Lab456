@@ -1,0 +1,22 @@
+---
+- name: Set ip loopback
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: set loopback ipv4 address
+      ios_13_interface:
+        name: loopback {{ item.number }}
+        ipv4: 10.0.{{ item.number }}.1/24
+      with_items:
+        - { number: 1 }
+        - { number: 2 }
+        - { number: 3 }
+
+    - name: Show ip
+      ios_command:
+        commands:
+          - show ip int br
+      register: show_vlan
+
+    - debug: var=show_vlan.stdout_lines
